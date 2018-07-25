@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_height="match_parent" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="25dp"
+            android:id="@+id/step_container"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Today - July 16"
+                android:textColor="#7a7a7a"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="212 Steps"
+                android:layout_marginTop="4dp"
+                android:textColor="#444444"
+                android:textStyle="bold"
+                android:textSize="28dp"/>
+        </LinearLayout>
+
+        <!--Bars-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="18dp"
+            android:id="@+id/bar_container"
+            android:orientation="vertical"
+            android:layout_below="@+id/step_container">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/user_steps"
+                    android:layout_width="45dp"
+                    android:layout_height="42dp"
+                    android:background="#00bff3" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="11dp"
+                    android:paddingTop="2dp"
+                    android:orientation="vertical"
+                    android:layout_toRightOf="@+id/user_steps">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="You"
+                        android:textSize="12dp"
+                        android:fontFamily="sans-serif"
+                        android:textColor="#3d3d3d"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="212 Steps"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="#9c9c9c"
+                        android:paddingTop="2dp"
+                        android:textSize="10dp"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/ashley"
+                    android:layout_width="95dp"
+                    android:layout_height="42dp"
+                    android:background="#fcb0b3" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="11dp"
+                    android:paddingTop="2dp"
+                    android:orientation="vertical"
+                    android:layout_toRightOf="@+id/ashley">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ashley"
+                        android:textSize="12dp"
+                        android:fontFamily="sans-serif"
+                        android:textColor="#3d3d3d"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="502 Steps"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="#9c9c9c"
+                        android:paddingTop="2dp"
+                        android:textSize="10dp"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/dave"
+                    android:layout_width="295dp"
+                    android:layout_height="42dp"
+                    android:background="#ca3c25" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="11dp"
+                    android:paddingTop="2dp"
+                    android:orientation="vertical"
+                    android:layout_toRightOf="@+id/dave">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dave"
+                        android:textSize="12dp"
+                        android:fontFamily="sans-serif"
+                        android:textColor="#3d3d3d"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2327 Steps"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="#9c9c9c"
+                        android:paddingTop="2dp"
+                        android:textSize="10dp"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/amber"
+                    android:layout_width="180dp"
+                    android:layout_height="42dp"
+                    android:background="#28666e" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="11dp"
+                    android:paddingTop="2dp"
+                    android:orientation="vertical"
+                    android:layout_toRightOf="@+id/amber">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Amber"
+                        android:textSize="12dp"
+                        android:fontFamily="sans-serif"
+                        android:textColor="#3d3d3d"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="502 Steps"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="#9c9c9c"
+                        android:paddingTop="2dp"
+                        android:textSize="10dp"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal"
+            android:layout_below="@id/bar_container"
+            android:id="@+id/add_friend">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:textSize="13dp"
+                android:id="@+id/add_friend_input"
+                android:background="@null"
+                android:paddingLeft="20dp"
+                android:textColorHint="#bfbfbf"
+                android:fontFamily="sans-serif"
+                android:paddingRight="20dp"
+                android:layout_height="30dp"
+                android:hint="Enter Friend Email"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:id="@+id/add_friend_button"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:background="@null"
+                android:fontFamily="sans-serif"
+                android:textColor="#bfbfbf"
+                android:textSize="13dp"
+                android:text="⊕ Add Friend"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="16dp"
+            android:layout_below="@+id/add_friend"
+            android:id="@+id/challenge_header_container"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Challenge - Set 1"
+                android:textColor="#7a7a7a"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Step Challenges"
+                android:layout_marginTop="4dp"
+                android:textColor="#444444"
+                android:textStyle="bold"
+                android:textSize="28dp"/>
+        </LinearLayout>
+
+        <!--Challenges-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/challenge_container"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:orientation="horizontal"
+            android:layout_below="@id/challenge_header_container">
+
+            <RelativeLayout
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:id="@+id/steps_500"
+                    android:textSize="14dp"
+                    android:text="500"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:textColor="#909090"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/steps_500"
+                    android:text="Total Steps"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:id="@+id/steps_1000"
+                    android:textSize="14dp"
+                    android:text="1000"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:textColor="#909090"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/steps_1000"
+                    android:text="Total Steps"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:id="@+id/steps_2000"
+                    android:textSize="14dp"
+                    android:text="2000"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:textColor="#909090"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/steps_2000"
+                    android:text="Total Steps"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:id="@+id/steps_5000"
+                    android:textSize="14dp"
+                    android:text="5000"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:textColor="#909090"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/steps_5000"
+                    android:text="Total Steps"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:id="@+id/steps_7500"
+                    android:textSize="14dp"
+                    android:text="7500"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:textColor="#909090"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/steps_7500"
+                    android:text="Total Steps"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="25dp"
+            android:layout_below="@+id/challenge_container"
+            android:id="@+id/history_header_container"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weekly Statistics"
+                android:textColor="#7a7a7a"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your History"
+                android:layout_marginTop="4dp"
+                android:textColor="#444444"
+                android:textStyle="bold"
+                android:textSize="28dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/history_header_container"
+            android:id="@+id/history_container"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/day_0"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:layout_height="80dp"
+                android:background="#00bff3" />
+
+            <View
+                android:id="@+id/day_1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:layout_height="120dp"
+                android:background="#00abda" />
+
+            <View
+                android:id="@+id/day_2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:layout_height="110dp"
+                android:background="#009cc6" />
+
+            <View
+                android:id="@+id/day_3"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:layout_height="100dp"
+                android:background="#0091b8" />
+
+            <View
+                android:id="@+id/day_4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:layout_height="150dp"
+                android:background="#0083a6" />
+
+            <View
+                android:id="@+id/day_5"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:layout_height="120dp"
+                android:background="#007392" />
+
+            <View
+                android:id="@+id/day_6"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:layout_height="154dp"
+                android:background="#00627c" />
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>
