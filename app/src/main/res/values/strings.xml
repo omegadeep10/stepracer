@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">StepRacer</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="login_text">Walk towards a healthier lifestyle and race your friends getting there. Step Racer is a pedometer that lets you compete with your friends.</string>
 </resources>

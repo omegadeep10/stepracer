@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content">
 
                 <View
-                    android:id="@+id/user_steps"
+                    android:id="@+id/your_steps"
                     android:layout_width="45dp"
                     android:layout_height="42dp"
                     android:background="#00bff3" />
@@ -62,7 +62,7 @@
                     android:paddingLeft="11dp"
                     android:paddingTop="2dp"
                     android:orientation="vertical"
-                    android:layout_toRightOf="@+id/user_steps">
+                    android:layout_toRightOf="@+id/your_steps">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content">
 
                 <View
-                    android:id="@+id/ashley"
+                    android:id="@+id/friend_one"
                     android:layout_width="95dp"
                     android:layout_height="42dp"
                     android:background="#fcb0b3" />
@@ -99,7 +99,7 @@
                     android:paddingLeft="11dp"
                     android:paddingTop="2dp"
                     android:orientation="vertical"
-                    android:layout_toRightOf="@+id/ashley">
+                    android:layout_toRightOf="@+id/friend_one">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content">
 
                 <View
-                    android:id="@+id/dave"
+                    android:id="@+id/friend_two"
                     android:layout_width="295dp"
                     android:layout_height="42dp"
                     android:background="#ca3c25" />
@@ -136,7 +136,7 @@
                     android:paddingLeft="11dp"
                     android:paddingTop="2dp"
                     android:orientation="vertical"
-                    android:layout_toRightOf="@+id/dave">
+                    android:layout_toRightOf="@+id/friend_two">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content">
 
                 <View
-                    android:id="@+id/amber"
+                    android:id="@+id/friend_three"
                     android:layout_width="180dp"
                     android:layout_height="42dp"
                     android:background="#28666e" />
@@ -173,7 +173,7 @@
                     android:paddingLeft="11dp"
                     android:paddingTop="2dp"
                     android:orientation="vertical"
-                    android:layout_toRightOf="@+id/amber">
+                    android:layout_toRightOf="@+id/friend_three">
 
                     <TextView
                         android:layout_width="wrap_content"
