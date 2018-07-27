@@ -2,9 +2,14 @@ package edu.mga.stepracer
 
 import android.animation.LayoutTransition
 import android.app.Activity
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.View
@@ -13,6 +18,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import com.firebase.jobdispatcher.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.Fitness
 import com.google.firebase.database.DataSnapshot
@@ -25,9 +31,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.max
 import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.HistoryClient
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.data.DataType.AGGREGATE_STEP_COUNT_DELTA
 import com.google.android.gms.fitness.data.DataType.TYPE_STEP_COUNT_DELTA
+import com.google.android.gms.fitness.data.Field
 import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.android.gms.tasks.OnFailureListener
@@ -54,6 +62,7 @@ class MainActivity : Activity() {
     var history_listener: ValueEventListener? = null;
     var highest_record_listener: ValueEventListener? = null;
     var highest_record: Int = 0
+    var fitness_client: HistoryClient? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,10 +84,9 @@ class MainActivity : Activity() {
         if (username.isEmpty()) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
+        } else {
+            initGoogleFit()
         }
-
-
-        initGoogleFit()
 
         date.setText("Today - " + SimpleDateFormat("MMMM dd").format(Calendar.getInstance().time))
         // init current user
@@ -89,9 +97,13 @@ class MainActivity : Activity() {
             override fun onDataChange(p0: DataSnapshot) {
                 if (!p0.exists()) return
 
-                var fr_1 = p0.child("friend_one").getValue().toString()
-                var fr_2 = p0.child("friend_two").getValue().toString()
-                var fr_3 = p0.child("friend_three").getValue().toString()
+                var fr_1 = ""
+                var fr_2 = ""
+                var fr_3 = ""
+
+                if (p0.exists() && p0.child("friend_one").exists()) fr_1 = p0.child("friend_one").getValue().toString()
+                if (p0.exists() && p0.child("friend_two").exists()) fr_2 = p0.child("friend_two").getValue().toString()
+                if (p0.exists() && p0.child("friend_three").exists()) fr_3 = p0.child("friend_three").getValue().toString()
 
                 if (fr_1.isNotEmpty()) {
                     if (friend_one_listener != null) database.getReference(friend_one_username!!).child("history").child(today).removeEventListener(friend_one_listener!!)
@@ -128,6 +140,7 @@ class MainActivity : Activity() {
                     if (highest_record >= 2000) show_earned(steps_2000_bg, steps_2000, steps_2000_desc) else hide_earned(steps_2000_bg, steps_2000, steps_2000_desc)
                     if (highest_record >= 5000) show_earned(steps_5000_bg, steps_5000, steps_5000_desc) else hide_earned(steps_5000_bg, steps_5000, steps_5000_desc)
                     if (highest_record >= 7500) show_earned(steps_7500_bg, steps_7500, steps_7500_desc) else hide_earned(steps_7500_bg, steps_7500, steps_7500_desc)
+                    if (highest_record >= 10000) show_earned(steps_7500_bg, steps_7500, steps_10000_desc) else hide_earned(steps_10000_bg, steps_10000, steps_10000_desc)
                 }
                //val x = dataSnapshot.getValue()
             }
@@ -198,27 +211,41 @@ class MainActivity : Activity() {
                 val friend = add_friend_input.text.toString()
                 if (friend.isEmpty()) return Toast.makeText(baseContext, "Please enter a username", Toast.LENGTH_SHORT).show()
 
+
                 database.getReference(username).child("subscriptions").addListenerForSingleValueEvent(object: ValueEventListener {
                     override fun onDataChange(p0: DataSnapshot) {
                         var fr_1 = ""
                         var fr_2 = ""
                         var fr_3 = ""
 
-                        if (p0.child("friend_one").exists()) fr_1 = p0.child("friend_one").getValue().toString()
-                        if (p0.child("friend_two").exists()) fr_2 = p0.child("friend_two").getValue().toString()
-                        if (p0.child("friend_three").exists()) fr_3 = p0.child("friend_three").getValue().toString()
+                        if (p0.exists() && p0.child("friend_one").exists()) fr_1 = p0.child("friend_one").getValue().toString()
+                        if (p0.exists() && p0.child("friend_two").exists()) fr_2 = p0.child("friend_two").getValue().toString()
+                        if (p0.exists() && p0.child("friend_three").exists()) fr_3 = p0.child("friend_three").getValue().toString()
 
                         if (fr_1.isEmpty()) database.getReference(username).child("subscriptions/friend_one").setValue(friend)
-                        if (fr_2.isEmpty()) database.getReference(username).child("subscriptions/friend_two").setValue(friend)
-                        if (fr_3.isEmpty()) database.getReference(username).child("subscriptions/friend_three").setValue(friend)
+                        else if (fr_2.isEmpty()) database.getReference(username).child("subscriptions/friend_two").setValue(friend)
+                        else if (fr_3.isEmpty()) database.getReference(username).child("subscriptions/friend_three").setValue(friend)
 
                         if (fr_1.isNotEmpty() && fr_2.isNotEmpty() && fr_3.isNotEmpty()) Toast.makeText(baseContext, "Friend limit reached! Tell Deep to fix his app.", Toast.LENGTH_SHORT).show()
+
                     }
 
                     override fun onCancelled(p0: DatabaseError) {
                         Log.e("ERROR: ", p0.toString())
                     }
                 })
+
+                add_friend_input.text.clear()
+                add_friend_input.clearFocus()
+            }
+        })
+
+        logout_button.setOnClickListener(object: View.OnClickListener{
+            override fun onClick(p0: View?) {
+                prefs!!.edit().remove("username").apply()
+                intent = Intent(baseContext, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         })
     }
@@ -237,30 +264,37 @@ class MainActivity : Activity() {
                     fitnessOptions);
         } else {
             accessGoogleFit();
+            setupService();
         }
     }
 
+    private fun setupService() {
+        var bundle = Bundle()
+        bundle.putString("username", username)
+        bundle.putString("today", today)
+
+        var dispatcher = FirebaseJobDispatcher(GooglePlayDriver(this.applicationContext))
+        var myJob = dispatcher.newJobBuilder()
+                .setService(StepService::class.java)
+                .setTag("step-counter")
+                .setRecurring(true)
+                .setTrigger(Trigger.executionWindow(60*10, 120*10))
+                .setExtras(bundle)
+                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
+                .build()
+
+        dispatcher.mustSchedule(myJob)
+    }
+
     public fun accessGoogleFit() {
-        var cal = Calendar.getInstance()
-        cal.setTime(Date())
-        var endTime = cal.getTimeInMillis()
-        cal.add(Calendar.YEAR, -1)
-        var startTime = cal.getTimeInMillis()
-
-
-        var readRequest = DataReadRequest.Builder()
-                .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
-                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-                .build();
-
-        Fitness.getHistoryClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
-                .readData(readRequest)
-                .addOnSuccessListener(OnSuccessListener {
-                    Log.d("TEST", it.getDataSet(DataType.AGGREGATE_STEP_COUNT_DELTA).toString())
-                })
-                .addOnFailureListener(OnFailureListener {
-                    Log.e("FAIL", it.message)
-                })
+        fitness_client = Fitness.getHistoryClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
+        var result = fitness_client!!.readDailyTotal(TYPE_STEP_COUNT_DELTA)
+        result
+            .addOnSuccessListener {
+                var daily_total = it.dataPoints.get(0).getValue(Field.FIELD_STEPS).asInt()
+                database.getReference(username).child("history").child(today).setValue(daily_total)
+                Log.d("FORCE COUNT: ", daily_total.toString())
+            }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

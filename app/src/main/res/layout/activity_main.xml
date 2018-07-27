@@ -5,9 +5,21 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:focusableInTouchMode="true"
         tools:context=".MainActivity">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:background="@null"
+            android:id="@+id/logout_button"
+            android:textSize="12dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="8dp"
+            android:textColor="#D3D3D3"/>
 
 
         <LinearLayout
@@ -275,165 +287,201 @@
         </LinearLayout>
 
         <!--Challenges-->
-        <LinearLayout
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/challenge_container"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp"
-            android:orientation="horizontal"
-            android:layout_below="@id/challenge_header_container">
-
-            <RelativeLayout
-                android:layout_width="65dp"
+            android:id="@+id/challenge_scroll"
+            android:layout_below="@id/challenge_header_container"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:paddingLeft="10dp"
-                android:id="@+id/steps_500_bg"
-                android:paddingRight="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/border">
+                android:id="@+id/challenge_container"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:id="@+id/steps_500"
-                    android:textSize="14dp"
-                    android:text="500"/>
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="10dp"
+                    android:id="@+id/steps_500_bg"
+                    android:paddingRight="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/border">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:id="@+id/steps_500"
+                        android:textSize="14dp"
+                        android:text="500"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:textColor="#909090"
+                        android:id="@+id/steps_500_desc"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@id/steps_500"
+                        android:text="Total Steps"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:textColor="#909090"
-                    android:id="@+id/steps_500_desc"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@id/steps_500"
-                    android:text="Total Steps"/>
-            </RelativeLayout>
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="10dp"
+                    android:id="@+id/steps_1000_bg"
+                    android:paddingRight="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/border">
 
-            <RelativeLayout
-                android:layout_width="65dp"
-                android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:paddingLeft="10dp"
-                android:id="@+id/steps_1000_bg"
-                android:paddingRight="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:id="@+id/steps_1000"
+                        android:textSize="14dp"
+                        android:text="1000"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:textColor="#909090"
+                        android:id="@+id/steps_1000_desc"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@id/steps_1000"
+                        android:text="Total Steps"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:id="@+id/steps_1000"
-                    android:textSize="14dp"
-                    android:text="1000"/>
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="10dp"
+                    android:id="@+id/steps_2000_bg"
+                    android:paddingRight="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/border">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:id="@+id/steps_2000"
+                        android:textSize="14dp"
+                        android:text="2000"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:textColor="#909090"
+                        android:id="@+id/steps_2000_desc"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@id/steps_2000"
+                        android:text="Total Steps"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:textColor="#909090"
-                    android:id="@+id/steps_1000_desc"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@id/steps_1000"
-                    android:text="Total Steps"/>
-            </RelativeLayout>
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:id="@+id/steps_5000_bg"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/border">
 
-            <RelativeLayout
-                android:layout_width="65dp"
-                android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:paddingLeft="10dp"
-                android:id="@+id/steps_2000_bg"
-                android:paddingRight="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:id="@+id/steps_5000"
+                        android:textSize="14dp"
+                        android:text="5000"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:textColor="#909090"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/steps_5000_desc"
+                        android:layout_below="@id/steps_5000"
+                        android:text="Total Steps"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:id="@+id/steps_2000"
-                    android:textSize="14dp"
-                    android:text="2000"/>
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:id="@+id/steps_7500_bg"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/border">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:id="@+id/steps_7500"
+                        android:textSize="14dp"
+                        android:text="7500"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:textColor="#909090"
+                        android:id="@+id/steps_7500_desc"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@id/steps_7500"
+                        android:text="Total Steps"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="65dp"
                     android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:textColor="#909090"
-                    android:id="@+id/steps_2000_desc"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@id/steps_2000"
-                    android:text="Total Steps"/>
-            </RelativeLayout>
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:id="@+id/steps_10000_bg"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/border">
 
-            <RelativeLayout
-                android:layout_width="65dp"
-                android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:id="@+id/steps_5000_bg"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/border">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:id="@+id/steps_10000"
+                        android:textSize="14dp"
+                        android:text="10000"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:id="@+id/steps_5000"
-                    android:textSize="14dp"
-                    android:text="5000"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:textColor="#909090"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/steps_5000_desc"
-                    android:layout_below="@id/steps_5000"
-                    android:text="Total Steps"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="65dp"
-                android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:id="@+id/steps_7500_bg"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/border">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:id="@+id/steps_7500"
-                    android:textSize="14dp"
-                    android:text="7500"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:textColor="#909090"
-                    android:id="@+id/steps_7500_desc"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@id/steps_7500"
-                    android:text="Total Steps"/>
-            </RelativeLayout>
-        </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:textColor="#909090"
+                        android:id="@+id/steps_10000_desc"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@id/steps_10000"
+                        android:text="Total Steps"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -442,7 +490,7 @@
             android:paddingRight="20dp"
             android:paddingLeft="20dp"
             android:paddingTop="25dp"
-            android:layout_below="@+id/challenge_container"
+            android:layout_below="@+id/challenge_scroll"
             android:id="@+id/history_header_container"
             android:paddingBottom="20dp">
 
