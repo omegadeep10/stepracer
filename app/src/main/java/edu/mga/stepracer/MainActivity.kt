@@ -9,21 +9,25 @@ import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
 import org.w3c.dom.Text
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.max
 
 class MainActivity : Activity() {
     var prefs: SharedPreferences? = null
     var username = "" // current user's username (set by LoginActivity)
     var database: FirebaseDatabase = FirebaseDatabase.getInstance() // firebase ref
-    var today = "20180101" // today's date for step counting purposes.
+    var today = SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().time) // today's date for step counting purposes.
     var screen_width: Int = 400
     var step_max = 5000 // the max steps value to use initially.
     var myself_listener: ValueEventListener? = null;
@@ -34,6 +38,7 @@ class MainActivity : Activity() {
     var friend_three_listener: ValueEventListener? = null;
     var friend_three_username: String? = null;
     var subscriptions_listener: ValueEventListener? = null;
+    var history_listener: ValueEventListener? = null;
     var highest_record_listener: ValueEventListener? = null;
     var highest_record: Int = 0
 
@@ -45,7 +50,9 @@ class MainActivity : Activity() {
         friend_one_container.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         friend_two_container.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         friend_three_container.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-        database.setPersistenceEnabled(true)
+        history_container.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        // bug with the way it works, so disabled for now
+        //database.setPersistenceEnabled(true)
 
         screen_width = resources.configuration.screenWidthDp - 100 // subtract 100 dp for space for name/steps
         prefs = getSharedPreferences("edu.mga.stepracer", 0); // get prefs
@@ -57,6 +64,7 @@ class MainActivity : Activity() {
             finish()
         }
 
+        date.setText("Today - " + SimpleDateFormat("MMMM dd").format(Calendar.getInstance().time))
         // init current user
         initUser()
 
@@ -112,6 +120,99 @@ class MainActivity : Activity() {
                 Log.e("ERROR: ", p0.toString())
             }
         })
+
+
+        history_listener = database.getReference(username).child("history").addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    var cal = Calendar.getInstance()
+
+                    val day_0_str = today
+                    cal.add(Calendar.DATE, -1)
+                    val day_1_str = SimpleDateFormat("yyyyMMdd").format(cal.time)
+                    cal.add(Calendar.DATE, -1)
+                    val day_2_str = SimpleDateFormat("yyyyMMdd").format(cal.time)
+                    cal.add(Calendar.DATE, -1)
+                    val day_3_str = SimpleDateFormat("yyyyMMdd").format(cal.time)
+                    cal.add(Calendar.DATE, -1)
+                    val day_4_str = SimpleDateFormat("yyyyMMdd").format(cal.time)
+                    cal.add(Calendar.DATE, -1)
+                    val day_5_str = SimpleDateFormat("yyyyMMdd").format(cal.time)
+                    cal.add(Calendar.DATE, -1)
+                    val day_6_str = SimpleDateFormat("yyyyMMdd").format(cal.time)
+
+
+                    var day_0_num = 0
+                    var day_1_num = 0
+                    var day_2_num = 0
+                    var day_3_num = 0
+                    var day_4_num = 0
+                    var day_5_num = 0
+                    var day_6_num = 0
+
+                    if (dataSnapshot.child(day_0_str).exists()) day_0_num = dataSnapshot.child(day_0_str).getValue().toString().toInt()
+                    if (dataSnapshot.child(day_1_str).exists()) day_1_num = dataSnapshot.child(day_1_str).getValue().toString().toInt()
+                    if (dataSnapshot.child(day_2_str).exists()) day_2_num = dataSnapshot.child(day_2_str).getValue().toString().toInt()
+                    if (dataSnapshot.child(day_3_str).exists()) day_3_num = dataSnapshot.child(day_3_str).getValue().toString().toInt()
+                    if (dataSnapshot.child(day_4_str).exists()) day_4_num = dataSnapshot.child(day_4_str).getValue().toString().toInt()
+                    if (dataSnapshot.child(day_5_str).exists()) day_5_num = dataSnapshot.child(day_5_str).getValue().toString().toInt()
+                    if (dataSnapshot.child(day_6_str).exists()) day_6_num = dataSnapshot.child(day_6_str).getValue().toString().toInt()
+
+                    val max_steps = intArrayOf(day_0_num, day_1_num, day_2_num, day_3_num, day_4_num, day_5_num, day_6_num).max()
+
+                    update_history(day_0, day_0_num, max_steps)
+                    update_history(day_1, day_1_num, max_steps)
+                    update_history(day_2, day_2_num, max_steps)
+                    update_history(day_3, day_3_num, max_steps)
+                    update_history(day_4, day_4_num, max_steps)
+                    update_history(day_5, day_5_num, max_steps)
+                    update_history(day_6, day_6_num, max_steps)
+                }
+                //val x = dataSnapshot.getValue()
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                Log.e("ERROR: ", p0.toString())
+            }
+        })
+
+
+        add_friend_button.setOnClickListener(object: View.OnClickListener {
+            override fun onClick(p0: View?) {
+                val friend = add_friend_input.text.toString()
+                if (friend.isEmpty()) return Toast.makeText(baseContext, "Please enter a username", Toast.LENGTH_SHORT).show()
+
+                database.getReference(username).child("subscriptions").addListenerForSingleValueEvent(object: ValueEventListener {
+                    override fun onDataChange(p0: DataSnapshot) {
+                        var fr_1 = ""
+                        var fr_2 = ""
+                        var fr_3 = ""
+
+                        if (p0.child("friend_one").exists()) fr_1 = p0.child("friend_one").getValue().toString()
+                        if (p0.child("friend_two").exists()) fr_2 = p0.child("friend_two").getValue().toString()
+                        if (p0.child("friend_three").exists()) fr_3 = p0.child("friend_three").getValue().toString()
+
+                        if (fr_1.isEmpty()) database.getReference(username).child("subscriptions/friend_one").setValue(friend)
+                        if (fr_2.isEmpty()) database.getReference(username).child("subscriptions/friend_two").setValue(friend)
+                        if (fr_3.isEmpty()) database.getReference(username).child("subscriptions/friend_three").setValue(friend)
+
+                        if (fr_1.isNotEmpty() && fr_2.isNotEmpty() && fr_3.isNotEmpty()) Toast.makeText(baseContext, "Friend limit reached! Tell Deep to fix his app.", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onCancelled(p0: DatabaseError) {
+                        Log.e("ERROR: ", p0.toString())
+                    }
+                })
+            }
+        })
+    }
+
+    private fun update_history(bar: View, steps: Int, max: Int?) {
+        val basic_steps = 100
+        val height: Int = Math.round(maxOf(steps, basic_steps).toFloat() / maxOf(max!!, steps).toFloat() * 150.toFloat())
+        bar.layoutParams.height = (height * baseContext.resources.displayMetrics.density).toInt()
+        bar.requestLayout()
+        // bar.setLayoutParams(RelativeLayout.LayoutParams(bar.width, (height * baseContext.resources.displayMetrics.density).toInt()))
     }
 
     private fun show_earned(bg: RelativeLayout, steps: TextView, desc: TextView) {
@@ -192,6 +293,7 @@ class MainActivity : Activity() {
         if (friend_one_listener != null) database.getReference(friend_one_username!!).child("history").child(today).removeEventListener(friend_one_listener!!)
         if (friend_two_listener != null) database.getReference(friend_two_username!!).child("history").child(today).removeEventListener(friend_two_listener!!)
         if (friend_three_listener != null) database.getReference(friend_three_username!!).child("history").child(today).removeEventListener(friend_three_listener!!)
+        if (history_listener != null) database.getReference(username).child("history").removeEventListener(history_listener!!)
 
     }
 

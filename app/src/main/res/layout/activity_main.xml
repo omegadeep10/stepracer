@@ -465,9 +465,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_below="@id/history_header_container"
             android:id="@+id/history_container"
+            android:baselineAligned="false"
+            android:animateLayoutChanges="true"
+            android:gravity="fill_vertical"
             android:orientation="horizontal">
 
             <View
@@ -475,7 +478,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_gravity="bottom"
-                android:layout_height="80dp"
+                android:layout_height="10dp"
                 android:background="#00bff3" />
 
             <View
@@ -483,7 +486,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_gravity="bottom"
-                android:layout_height="120dp"
+                android:gravity="bottom"
+                android:layout_height="13dp"
                 android:background="#00abda" />
 
             <View
@@ -491,7 +495,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_gravity="bottom"
-                android:layout_height="110dp"
+                android:gravity="bottom"
+                android:layout_height="10dp"
                 android:background="#009cc6" />
 
             <View
@@ -499,7 +504,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_gravity="bottom"
-                android:layout_height="100dp"
+                android:gravity="bottom"
+                android:layout_height="10dp"
                 android:background="#0091b8" />
 
             <View
@@ -507,7 +513,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_gravity="bottom"
-                android:layout_height="150dp"
+                android:gravity="bottom"
+                android:layout_height="10dp"
                 android:background="#0083a6" />
 
             <View
@@ -515,7 +522,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_gravity="bottom"
-                android:layout_height="120dp"
+                android:gravity="bottom"
+                android:layout_height="10dp"
                 android:background="#007392" />
 
             <View
@@ -523,7 +531,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_gravity="bottom"
-                android:layout_height="154dp"
+                android:gravity="bottom"
+                android:layout_height="10dp"
                 android:background="#00627c" />
         </LinearLayout>
     </RelativeLayout>
