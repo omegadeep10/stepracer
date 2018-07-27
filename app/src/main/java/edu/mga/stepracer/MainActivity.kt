@@ -11,6 +11,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -85,73 +86,120 @@ class MainActivity : Activity() {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         } else {
-            initGoogleFit()
-        }
+            add_friend_button.setOnClickListener(object: View.OnClickListener {
+                override fun onClick(p0: View?) {
+                    val friend = add_friend_input.text.toString()
+                    if (friend.isEmpty()) return Toast.makeText(baseContext, "Please enter a username", Toast.LENGTH_SHORT).show()
 
-        date.setText("Today - " + SimpleDateFormat("MMMM dd").format(Calendar.getInstance().time))
-        // init current user
-        initUser()
 
-        // get subs and initialize their bars and data
-        subscriptions_listener = database.getReference(username).child("subscriptions").addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
-                if (!p0.exists()) return
+                    database.getReference(username).child("subscriptions").addListenerForSingleValueEvent(object: ValueEventListener {
+                        override fun onDataChange(p0: DataSnapshot) {
+                            var fr_1 = ""
+                            var fr_2 = ""
+                            var fr_3 = ""
 
-                var fr_1 = ""
-                var fr_2 = ""
-                var fr_3 = ""
+                            if (p0.exists() && p0.child("friend_one").exists()) fr_1 = p0.child("friend_one").getValue().toString()
+                            if (p0.exists() && p0.child("friend_two").exists()) fr_2 = p0.child("friend_two").getValue().toString()
+                            if (p0.exists() && p0.child("friend_three").exists()) fr_3 = p0.child("friend_three").getValue().toString()
 
-                if (p0.exists() && p0.child("friend_one").exists()) fr_1 = p0.child("friend_one").getValue().toString()
-                if (p0.exists() && p0.child("friend_two").exists()) fr_2 = p0.child("friend_two").getValue().toString()
-                if (p0.exists() && p0.child("friend_three").exists()) fr_3 = p0.child("friend_three").getValue().toString()
+                            if (fr_1.isEmpty()) database.getReference(username).child("subscriptions/friend_one").setValue(friend)
+                            else if (fr_2.isEmpty()) database.getReference(username).child("subscriptions/friend_two").setValue(friend)
+                            else if (fr_3.isEmpty()) database.getReference(username).child("subscriptions/friend_three").setValue(friend)
 
-                if (fr_1.isNotEmpty()) {
-                    if (friend_one_listener != null) database.getReference(friend_one_username!!).child("history").child(today).removeEventListener(friend_one_listener!!)
-                    friend_one_username = fr_1
-                    friend_one_listener = initFriend(fr_1, friend_one_steps, friend_one_name, friend_one)
+                            if (fr_1.isNotEmpty() && fr_2.isNotEmpty() && fr_3.isNotEmpty()) Toast.makeText(baseContext, "Friend limit reached! Tell Deep to fix his app.", Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        override fun onCancelled(p0: DatabaseError) {
+                            Log.e("ERROR: ", p0.toString())
+                        }
+                    })
+
+                    add_friend_input.text.clear()
+                    add_friend_input.clearFocus()
+                }
+            })
+
+            logout_button.setOnClickListener(object: View.OnClickListener{
+                override fun onClick(p0: View?) {
+                    prefs!!.edit().remove("username").apply()
+                    intent = Intent(baseContext, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            })
+
+            get_steps_pulldown.setOnRefreshListener(object: SwipeRefreshLayout.OnRefreshListener {
+                override fun onRefresh() {
+                    accessGoogleFit()
+                    get_steps_pulldown.isRefreshing = false
+                }
+            })
+
+            date.setText("Today - " + SimpleDateFormat("MMMM dd").format(Calendar.getInstance().time))
+            // init current user
+            initUser()
+
+            // get subs and initialize their bars and data
+            subscriptions_listener = database.getReference(username).child("subscriptions").addValueEventListener(object: ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (!p0.exists()) return
+
+                    var fr_1 = ""
+                    var fr_2 = ""
+                    var fr_3 = ""
+
+                    if (p0.exists() && p0.child("friend_one").exists()) fr_1 = p0.child("friend_one").getValue().toString()
+                    if (p0.exists() && p0.child("friend_two").exists()) fr_2 = p0.child("friend_two").getValue().toString()
+                    if (p0.exists() && p0.child("friend_three").exists()) fr_3 = p0.child("friend_three").getValue().toString()
+
+                    if (fr_1.isNotEmpty()) {
+                        if (friend_one_listener != null) database.getReference(friend_one_username!!).child("history").child(today).removeEventListener(friend_one_listener!!)
+                        friend_one_username = fr_1
+                        friend_one_listener = initFriend(fr_1, friend_one_steps, friend_one_name, friend_one)
+                    }
+
+                    if (fr_2.isNotEmpty()) {
+                        if (friend_two_listener != null) database.getReference(friend_two_username!!).child("history").child(today).removeEventListener(friend_two_listener!!)
+                        friend_two_username = fr_2
+                        friend_two_listener = initFriend(fr_2, friend_two_steps, friend_two_name, friend_two)
+                    }
+
+                    if (fr_3.isNotEmpty()) {
+                        if (friend_three_listener != null) database.getReference(friend_three_username!!).child("history").child(today).removeEventListener(friend_three_listener!!)
+                        friend_three_username = fr_3
+                        friend_three_listener = initFriend(fr_3, friend_three_steps, friend_three_name, friend_three)
+                    }
                 }
 
-                if (fr_2.isNotEmpty()) {
-                    if (friend_two_listener != null) database.getReference(friend_two_username!!).child("history").child(today).removeEventListener(friend_two_listener!!)
-                    friend_two_username = fr_2
-                    friend_two_listener = initFriend(fr_2, friend_two_steps, friend_two_name, friend_two)
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.e("ERROR: ", p0.toString())
+                }
+            })
+
+            // listen to changes on History and make sure challenges stay updated
+            highest_record_listener = database.getReference(username).child("history").orderByValue().limitToLast(1).addValueEventListener(object: ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        highest_record = dataSnapshot.children.first().getValue().toString().toInt()
+
+                        if (highest_record >= 500) show_earned(steps_500_bg, steps_500, steps_500_desc) else hide_earned(steps_500_bg, steps_500, steps_500_desc)
+                        if (highest_record >= 1000) show_earned(steps_1000_bg, steps_1000, steps_1000_desc) else hide_earned(steps_1000_bg, steps_1000, steps_1000_desc)
+                        if (highest_record >= 2000) show_earned(steps_2000_bg, steps_2000, steps_2000_desc) else hide_earned(steps_2000_bg, steps_2000, steps_2000_desc)
+                        if (highest_record >= 5000) show_earned(steps_5000_bg, steps_5000, steps_5000_desc) else hide_earned(steps_5000_bg, steps_5000, steps_5000_desc)
+                        if (highest_record >= 7500) show_earned(steps_7500_bg, steps_7500, steps_7500_desc) else hide_earned(steps_7500_bg, steps_7500, steps_7500_desc)
+                        if (highest_record >= 10000) show_earned(steps_7500_bg, steps_7500, steps_10000_desc) else hide_earned(steps_10000_bg, steps_10000, steps_10000_desc)
+                    }
+                   //val x = dataSnapshot.getValue()
                 }
 
-                if (fr_3.isNotEmpty()) {
-                    if (friend_three_listener != null) database.getReference(friend_three_username!!).child("history").child(today).removeEventListener(friend_three_listener!!)
-                    friend_three_username = fr_3
-                    friend_three_listener = initFriend(fr_3, friend_three_steps, friend_three_name, friend_three)
+                override fun onCancelled(p0: DatabaseError) {
+                    Log.e("ERROR: ", p0.toString())
                 }
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-                Log.e("ERROR: ", p0.toString())
-            }
-        })
-
-        // listen to changes on History and make sure challenges stay updated
-        highest_record_listener = database.getReference(username).child("history").orderByValue().limitToLast(1).addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    highest_record = dataSnapshot.children.first().getValue().toString().toInt()
-
-                    if (highest_record >= 500) show_earned(steps_500_bg, steps_500, steps_500_desc) else hide_earned(steps_500_bg, steps_500, steps_500_desc)
-                    if (highest_record >= 1000) show_earned(steps_1000_bg, steps_1000, steps_1000_desc) else hide_earned(steps_1000_bg, steps_1000, steps_1000_desc)
-                    if (highest_record >= 2000) show_earned(steps_2000_bg, steps_2000, steps_2000_desc) else hide_earned(steps_2000_bg, steps_2000, steps_2000_desc)
-                    if (highest_record >= 5000) show_earned(steps_5000_bg, steps_5000, steps_5000_desc) else hide_earned(steps_5000_bg, steps_5000, steps_5000_desc)
-                    if (highest_record >= 7500) show_earned(steps_7500_bg, steps_7500, steps_7500_desc) else hide_earned(steps_7500_bg, steps_7500, steps_7500_desc)
-                    if (highest_record >= 10000) show_earned(steps_7500_bg, steps_7500, steps_10000_desc) else hide_earned(steps_10000_bg, steps_10000, steps_10000_desc)
-                }
-               //val x = dataSnapshot.getValue()
-            }
-
-            override fun onCancelled(p0: DatabaseError) {
-                Log.e("ERROR: ", p0.toString())
-            }
-        })
+            })
 
 
-        history_listener = database.getReference(username).child("history").addValueEventListener(object: ValueEventListener {
+            history_listener = database.getReference(username).child("history").addValueEventListener(object: ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     var cal = Calendar.getInstance()
@@ -206,48 +254,10 @@ class MainActivity : Activity() {
         })
 
 
-        add_friend_button.setOnClickListener(object: View.OnClickListener {
-            override fun onClick(p0: View?) {
-                val friend = add_friend_input.text.toString()
-                if (friend.isEmpty()) return Toast.makeText(baseContext, "Please enter a username", Toast.LENGTH_SHORT).show()
+            initGoogleFit()
+        }
 
 
-                database.getReference(username).child("subscriptions").addListenerForSingleValueEvent(object: ValueEventListener {
-                    override fun onDataChange(p0: DataSnapshot) {
-                        var fr_1 = ""
-                        var fr_2 = ""
-                        var fr_3 = ""
-
-                        if (p0.exists() && p0.child("friend_one").exists()) fr_1 = p0.child("friend_one").getValue().toString()
-                        if (p0.exists() && p0.child("friend_two").exists()) fr_2 = p0.child("friend_two").getValue().toString()
-                        if (p0.exists() && p0.child("friend_three").exists()) fr_3 = p0.child("friend_three").getValue().toString()
-
-                        if (fr_1.isEmpty()) database.getReference(username).child("subscriptions/friend_one").setValue(friend)
-                        else if (fr_2.isEmpty()) database.getReference(username).child("subscriptions/friend_two").setValue(friend)
-                        else if (fr_3.isEmpty()) database.getReference(username).child("subscriptions/friend_three").setValue(friend)
-
-                        if (fr_1.isNotEmpty() && fr_2.isNotEmpty() && fr_3.isNotEmpty()) Toast.makeText(baseContext, "Friend limit reached! Tell Deep to fix his app.", Toast.LENGTH_SHORT).show()
-
-                    }
-
-                    override fun onCancelled(p0: DatabaseError) {
-                        Log.e("ERROR: ", p0.toString())
-                    }
-                })
-
-                add_friend_input.text.clear()
-                add_friend_input.clearFocus()
-            }
-        })
-
-        logout_button.setOnClickListener(object: View.OnClickListener{
-            override fun onClick(p0: View?) {
-                prefs!!.edit().remove("username").apply()
-                intent = Intent(baseContext, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-        })
     }
 
     public fun initGoogleFit() {
@@ -287,6 +297,16 @@ class MainActivity : Activity() {
     }
 
     public fun accessGoogleFit() {
+        val fitnessOptions = FitnessOptions.builder()
+                .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+                .build()
+
+        if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), fitnessOptions)) {
+            return
+        }
+
+
         fitness_client = Fitness.getHistoryClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
         var result = fitness_client!!.readDailyTotal(TYPE_STEP_COUNT_DELTA)
         result
