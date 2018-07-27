@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.fitness.Fitness
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -22,12 +24,23 @@ import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.max
+import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataType
+import com.google.android.gms.fitness.data.DataType.AGGREGATE_STEP_COUNT_DELTA
+import com.google.android.gms.fitness.data.DataType.TYPE_STEP_COUNT_DELTA
+import com.google.android.gms.fitness.request.DataReadRequest
+import com.google.android.gms.fitness.result.DataReadResponse
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import java.util.concurrent.TimeUnit
+
 
 class MainActivity : Activity() {
     var prefs: SharedPreferences? = null
     var username = "" // current user's username (set by LoginActivity)
     var database: FirebaseDatabase = FirebaseDatabase.getInstance() // firebase ref
     var today = SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().time) // today's date for step counting purposes.
+    val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 533
     var screen_width: Int = 400
     var step_max = 5000 // the max steps value to use initially.
     var myself_listener: ValueEventListener? = null;
@@ -63,6 +76,9 @@ class MainActivity : Activity() {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
+
+
+        initGoogleFit()
 
         date.setText("Today - " + SimpleDateFormat("MMMM dd").format(Calendar.getInstance().time))
         // init current user
@@ -205,6 +221,54 @@ class MainActivity : Activity() {
                 })
             }
         })
+    }
+
+    public fun initGoogleFit() {
+        val fitnessOptions = FitnessOptions.builder()
+                .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+                .build()
+
+        if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), fitnessOptions)) {
+            GoogleSignIn.requestPermissions(
+                    this, // your activity
+                    GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
+                    GoogleSignIn.getLastSignedInAccount(this),
+                    fitnessOptions);
+        } else {
+            accessGoogleFit();
+        }
+    }
+
+    public fun accessGoogleFit() {
+        var cal = Calendar.getInstance()
+        cal.setTime(Date())
+        var endTime = cal.getTimeInMillis()
+        cal.add(Calendar.YEAR, -1)
+        var startTime = cal.getTimeInMillis()
+
+
+        var readRequest = DataReadRequest.Builder()
+                .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .build();
+
+        Fitness.getHistoryClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
+                .readData(readRequest)
+                .addOnSuccessListener(OnSuccessListener {
+                    Log.d("TEST", it.getDataSet(DataType.AGGREGATE_STEP_COUNT_DELTA).toString())
+                })
+                .addOnFailureListener(OnFailureListener {
+                    Log.e("FAIL", it.message)
+                })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
+                accessGoogleFit();
+            }
+        }
     }
 
     private fun update_history(bar: View, steps: Int, max: Int?) {
