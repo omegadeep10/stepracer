@@ -7,11 +7,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.database.FirebaseDatabase
 
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : Activity() {
     var prefs: SharedPreferences? = null;
+    var database: FirebaseDatabase = FirebaseDatabase.getInstance();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +28,10 @@ class LoginActivity : Activity() {
             } else {
                 prefs!!.edit().putString("username", user).apply()
                 prefs!!.edit().putString("first_name", name).apply()
+
+                database.getReference(user).child("name").setValue(name);
                 startActivity(Intent(this, MainActivity::class.java))
+                finish()
             }
         })
     }

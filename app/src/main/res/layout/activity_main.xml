@@ -6,6 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
         tools:context=".MainActivity">
 
 
@@ -30,6 +31,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/step_count"
                 android:text="212 Steps"
                 android:layout_marginTop="4dp"
                 android:textColor="#444444"
@@ -44,15 +46,18 @@
             android:paddingTop="18dp"
             android:id="@+id/bar_container"
             android:orientation="vertical"
+            android:animateLayoutChanges="true"
             android:layout_below="@+id/step_container">
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:id="@+id/your_steps_container"
+                android:animateLayoutChanges="true"
                 android:layout_height="wrap_content">
 
                 <View
                     android:id="@+id/your_steps"
-                    android:layout_width="45dp"
+                    android:layout_width="10dp"
                     android:layout_height="42dp"
                     android:background="#00bff3" />
 
@@ -76,6 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="212 Steps"
+                        android:id="@+id/your_steps_text"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="#9c9c9c"
                         android:paddingTop="2dp"
@@ -85,11 +91,13 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:id="@+id/friend_one_container"
                 android:layout_height="wrap_content">
 
                 <View
                     android:id="@+id/friend_one"
-                    android:layout_width="95dp"
+                    android:layout_width="10dp"
                     android:layout_height="42dp"
                     android:background="#fcb0b3" />
 
@@ -104,7 +112,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ashley"
+                        android:id="@+id/friend_one_name"
+                        android:text="Add Friend One"
                         android:textSize="12dp"
                         android:fontFamily="sans-serif"
                         android:textColor="#3d3d3d"/>
@@ -112,7 +121,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="502 Steps"
+                        android:text="0 Steps"
+                        android:id="@+id/friend_one_steps"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="#9c9c9c"
                         android:paddingTop="2dp"
@@ -122,11 +132,13 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:id="@+id/friend_two_container"
+                android:animateLayoutChanges="true"
                 android:layout_height="wrap_content">
 
                 <View
                     android:id="@+id/friend_two"
-                    android:layout_width="295dp"
+                    android:layout_width="10dp"
                     android:layout_height="42dp"
                     android:background="#ca3c25" />
 
@@ -141,7 +153,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dave"
+                        android:id="@+id/friend_two_name"
+                        android:text="Add Friend Two"
                         android:textSize="12dp"
                         android:fontFamily="sans-serif"
                         android:textColor="#3d3d3d"/>
@@ -149,7 +162,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2327 Steps"
+                        android:id="@+id/friend_two_steps"
+                        android:text="0 Steps"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="#9c9c9c"
                         android:paddingTop="2dp"
@@ -159,11 +173,13 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:id="@+id/friend_three_container"
+                android:animateLayoutChanges="true"
                 android:layout_height="wrap_content">
 
                 <View
                     android:id="@+id/friend_three"
-                    android:layout_width="180dp"
+                    android:layout_width="10dp"
                     android:layout_height="42dp"
                     android:background="#28666e" />
 
@@ -178,7 +194,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Amber"
+                        android:text="Add Friend Three"
+                        android:id="@+id/friend_three_name"
                         android:textSize="12dp"
                         android:fontFamily="sans-serif"
                         android:textColor="#3d3d3d"/>
@@ -186,7 +203,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="502 Steps"
+                        android:text="0 Steps"
+                        android:id="@+id/friend_three_steps"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="#9c9c9c"
                         android:paddingTop="2dp"
@@ -272,6 +290,7 @@
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:paddingLeft="10dp"
+                android:id="@+id/steps_500_bg"
                 android:paddingRight="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/border">
@@ -289,6 +308,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
                     android:textColor="#909090"
+                    android:id="@+id/steps_500_desc"
                     android:layout_marginTop="10dp"
                     android:layout_below="@id/steps_500"
                     android:text="Total Steps"/>
@@ -300,6 +320,7 @@
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:paddingLeft="10dp"
+                android:id="@+id/steps_1000_bg"
                 android:paddingRight="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/border">
@@ -317,6 +338,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
                     android:textColor="#909090"
+                    android:id="@+id/steps_1000_desc"
                     android:layout_marginTop="10dp"
                     android:layout_below="@id/steps_1000"
                     android:text="Total Steps"/>
@@ -328,6 +350,7 @@
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:paddingLeft="10dp"
+                android:id="@+id/steps_2000_bg"
                 android:paddingRight="10dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/border">
@@ -345,6 +368,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
                     android:textColor="#909090"
+                    android:id="@+id/steps_2000_desc"
                     android:layout_marginTop="10dp"
                     android:layout_below="@id/steps_2000"
                     android:text="Total Steps"/>
@@ -355,6 +379,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
+                android:id="@+id/steps_5000_bg"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:layout_marginRight="10dp"
@@ -374,6 +399,7 @@
                     android:textSize="10dp"
                     android:textColor="#909090"
                     android:layout_marginTop="10dp"
+                    android:id="@+id/steps_5000_desc"
                     android:layout_below="@id/steps_5000"
                     android:text="Total Steps"/>
             </RelativeLayout>
@@ -383,6 +409,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
+                android:id="@+id/steps_7500_bg"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:layout_marginRight="10dp"
@@ -401,6 +428,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
                     android:textColor="#909090"
+                    android:id="@+id/steps_7500_desc"
                     android:layout_marginTop="10dp"
                     android:layout_below="@id/steps_7500"
                     android:text="Total Steps"/>
