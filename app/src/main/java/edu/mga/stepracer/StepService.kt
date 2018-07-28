@@ -40,9 +40,10 @@ class StepService: com.firebase.jobdispatcher.JobService() {
 
         result
             .addOnSuccessListener {
-                val steps = it.dataPoints.get(0).getValue(Field.FIELD_STEPS).asInt()
+                var steps = 0
+                if (it.dataPoints.size > 0) steps = it.dataPoints.get(0).getValue(Field.FIELD_STEPS).asInt()
+                if (steps > 0) database.getReference(username).child("history").child(today).setValue(steps)
                 Log.d("STEPS: ", steps.toString())
-                database.getReference(username).child("history").child(today).setValue(steps)
                 jobFinished(job, false)
             }
             .addOnFailureListener {

@@ -279,17 +279,12 @@ class MainActivity : Activity() {
     }
 
     private fun setupService() {
-        var bundle = Bundle()
-        bundle.putString("username", username)
-        bundle.putString("today", today)
-
         var dispatcher = FirebaseJobDispatcher(GooglePlayDriver(this.applicationContext))
         var myJob = dispatcher.newJobBuilder()
                 .setService(StepService::class.java)
                 .setTag("step-counter")
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(60*10, 120*10))
-                .setExtras(bundle)
                 .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
                 .build()
 
@@ -311,9 +306,11 @@ class MainActivity : Activity() {
         var result = fitness_client!!.readDailyTotal(TYPE_STEP_COUNT_DELTA)
         result
             .addOnSuccessListener {
-                var daily_total = it.dataPoints.get(0).getValue(Field.FIELD_STEPS).asInt()
-                database.getReference(username).child("history").child(today).setValue(daily_total)
+                var daily_total = 0
+                if (it.dataPoints.size > 0) daily_total = it.dataPoints.get(0).getValue(Field.FIELD_STEPS).asInt()
+                if (daily_total > 0) database.getReference(username).child("history").child(today).setValue(daily_total)
                 Log.d("FORCE COUNT: ", daily_total.toString())
+                Log.d("DATA POINTS: ", it.dataPoints.size.toString())
             }
     }
 
